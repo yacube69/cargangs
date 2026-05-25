@@ -268,14 +268,12 @@
     }
 
     .msg.success {
-      display: block;
       background: #0f2a1a;
       border: 1px solid #1e5c35;
       color: #4ade80;
     }
 
     .msg.error {
-      display: block;
       background: #2a0f0f;
       border: 1px solid #5c1e1e;
       color: #f87171;
@@ -423,12 +421,16 @@
           body: JSON.stringify({ name, email, company, offer, message }),
         });
 
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        if (!res.ok) {
+          const data = await res.json().catch(() => ({}));
+          console.error("Function error:", data);
+          throw new Error(data.detail || `HTTP ${res.status}`);
+        }
 
         form.reset();
         msgOk.style.display = "block";
       } catch (err) {
-        console.error(err);
+        console.error("Submit error:", err.message);
         msgErr.style.display = "block";
         msgErr.textContent = "Something went wrong. Please try again or email us directly.";
       } finally {

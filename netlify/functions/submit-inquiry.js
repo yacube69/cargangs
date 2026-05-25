@@ -35,8 +35,8 @@ exports.handler = async (event) => {
 
   if (!res.ok) {
     const detail = await res.text();
-    console.error("Supabase error:", detail);
-    return { statusCode: 502, body: JSON.stringify({ error: "Failed to save inquiry." }) };
+    console.error("Supabase error:", res.status, detail);
+    return { statusCode: 502, body: JSON.stringify({ error: "Failed to save inquiry.", detail }) };
   }
 
   return { statusCode: 200, body: JSON.stringify({ ok: true }) };
